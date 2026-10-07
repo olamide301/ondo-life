@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#0b110d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Ondo Life</title>
+<style>
+:root{
+  --bg:#080d0a;--card:#121a15;--card2:#18221b;--line:#2a3a30;
+  --text:#f4f7f4;--muted:#9eb0a4;--gold:#f2c14e;--green:#69d17b;
+  --red:#ef7567;--blue:#6fb7ff;--shadow:0 18px 50px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif}
+body{min-height:100dvh;overflow-x:hidden}
+button{font:inherit}
+#app{width:100%;max-width:520px;margin:auto;min-height:100dvh;padding:env(safe-area-inset-top) 14px calc(92px + env(safe-area-inset-bottom))}
+.top{display:flex;align-items:center;justify-content:space-between;padding:14px 2px 10px}
+.brand{font-size:22px;font-weight:800}.brand span{color:var(--gold)}
+.location{font-size:12px;color:var(--muted);margin-top:2px}
+.day{background:var(--card2);border:1px solid var(--line);padding:7px 10px;border-radius:999px;font-size:12px;color:var(--muted)}
+.day b{color:var(--text)}
+.hero{background:linear-gradient(145deg,#17241b,#0f1712);border:1px solid var(--line);border-radius:24px;padding:20px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.hero:after{content:"☀";position:absolute;right:-8px;top:-25px;font-size:130px;opacity:.05}
+.money-label{color:var(--muted);font-size:12px}.money{font-size:39px;font-weight:850;letter-spacing:-1.5px;margin:3px 0}
+.net{font-size:12px;color:var(--muted)}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.stat{background:rgba(255,255,255,.035);border:1px solid var(--line);border-radius:15px;padding:11px}
+.stat-top{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:7px}
+.track{height:9px;background:#0a100c;border-radius:99px;overflow:hidden}.fill{height:100%;border-radius:99px;transition:width .25s}
+.energy{background:linear-gradient(90deg,#d49a34,var(--gold))}.happy{background:linear-gradient(90deg,#45a95a,var(--green))}
+.section-title{font-size:16px;font-weight:800;margin:20px 2px 10px}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.action{border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:18px;padding:15px;text-align:left;min-height:106px;box-shadow:0 7px 20px rgba(0,0,0,.16);transition:.12s}
+.action:active{transform:scale(.97);background:#1b281f}
+.action:disabled{opacity:.35}
+.icon{font-size:25px}.aname{font-weight:750;margin-top:7px;font-size:14px}.desc{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.35}
+.log{margin-top:20px;background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.log-head{display:flex;justify-content:space-between;padding:13px 14px;border-bottom:1px solid var(--line);font-weight:750}
+.log-body{max-height:220px;overflow:auto;padding:4px 14px}
+.entry{padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:13px;line-height:1.4}
+.entry:last-child{border:0}.time{font-size:10px;color:#718379;margin-right:7px}.good{color:var(--green)}.bad{color:var(--red)}.gold{color:var(--gold)}
+.nav{position:fixed;z-index:5;left:50%;bottom:0;transform:translateX(-50%);width:min(520px,100%);padding:8px 14px calc(8px + env(safe-area-inset-bottom));background:rgba(9,14,11,.88);backdrop-filter:blur(18px);border-top:1px solid var(--line)}
+.nav-inner{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.nav button{border:0;background:transparent;color:var(--muted);padding:8px;border-radius:12px}.nav button.active{color:var(--gold);background:rgba(242,193,78,.08)}
+.overlay{position:fixed;transition:none!important;animation:none!important;inset:0;z-index:20;background:rgba(3,7,5,.88);backdrop-filter:blur(12px);display:flex;align-items:flex-end;justify-content:center;padding:18px}
+.modal{width:min(520px,100%);background:linear-gradient(160deg,#18231c,#101811);border:1px solid #35463b;border-radius:28px;padding:27px 21px calc(22px + env(safe-area-inset-bottom));box-shadow:var(--shadow);text-align:center}
+.modal .sun{font-size:48px}.modal h1{font-size:30px;margin:7px 0}.modal h1 span{color:var(--gold)}.modal p{color:var(--muted);line-height:1.6;font-size:14px}
+.primary{width:100%;border:0;border-radius:16px;background:linear-gradient(135deg,#ffd56e,#eeb73e);padding:15px;font-weight:850;color:#231b08;margin-top:8px;box-shadow:0 8px 24px rgba(242,193,78,.18)}
+.secondary{width:100%;border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:16px;padding:13px;margin-top:9px}
+.hidden{display:none!important}
+.toast{position:fixed;z-index:30;left:50%;top:calc(16px + env(safe-area-inset-top));transform:translate(-50%,-20px);opacity:0;background:#edf7ef;color:#0c140f;padding:10px 15px;border-radius:999px;font-size:12px;font-weight:700;transition:.2s;pointer-events:none;white-space:nowrap}.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:390px){.actions{grid-template-columns:1fr}.money{font-size:34px}}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="top">
+    <div><div class="brand">☀️ Ondo <span>Life</span></div><div class="location">Akure, Ondo State · Sunshine State</div></div>
+    <div class="day">DAY <b id="day">1</b> · <b id="slot">Morning</b></div>
+  </div>
+
+  <main>
+    <section class="hero">
+      <div class="money-label">CASH</div>
+      <div class="money" id="cash">₦15,000</div>
+      <div class="net" id="net">Net worth ₦15,000 / ₦1,000,000</div>
+      <div class="stats">
+        <div class="stat"><div class="stat-top"><span>⚡ Energy</span><b id="eNum">80/100</b></div><div class="track"><div id="eBar" class="fill energy" style="width:80%"></div></div></div>
+        <div class="stat"><div class="stat-top"><span>😊 Happiness</span><b id="hNum">65/100</b></div><div class="track"><div id="hBar" class="fill happy" style="width:65%"></div></div></div>
+      </div>
+    </section>
+
+    <div class="section-title">What will you do?</div>
+    <div class="actions" id="actions"></div>
+
+    <section class="log">
+      <div class="log-head"><span>📜 Life log</span><button id="reset" style="border:0;background:none;color:var(--muted);font-size:11px">Reset</button></div>
+      <div class="log-body" id="log"></div>
+    </section>
+  </main>
+</div>
+
+<div class="nav">
+  <div class="nav-inner">
+    <button class="active">🏠<br><small>Life</small></button>
+    <button onclick="showStats()">📊<br><small>Stats</small></button>
+    <button onclick="showHelp()">❓<br><small>Help</small></button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="sun">☀️</div>
+    <h1>Welcome to <span>Ondo Life</span></h1>
+    <p>You land in Akure with ₦15,000 and one Ghana-Must-Go bag. Work, eat, travel, buy land, survive random wahala and build your net worth to ₦1,000,000.</p>
+    <button class="primary" id="start">Start life</button>
+    <button class="secondary hidden" id="continue">Continue saved life</button>
+  </div>
+</div>
+
+<script>
+(() => {
+'use strict';
+const KEY='ondolife_iphone_v2', SLOTS=['Morning','Afternoon','Evening','Night'], GOAL=1000000;
+const fmt=n=>'₦'+Math.round(n).toLocaleString('en-NG');
+let S=null;
+
+function fresh(){return{cash:15000,land:0,energy:80,happy:65,day:1,slot:0,over:false,won:false,log:[{msg:'You land in Akure with one bag and Sunshine State dreams.',cls:'',day:1,slot:'Morning'}]}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function load(){try{let x=JSON.parse(localStorage.getItem(KEY));return x&&typeof x.cash==='number'?x:null}catch(e){return null}}
+function net(){return S.cash+S.land}
+function say(msg,cls=''){S.log.unshift({msg,cls,day:S.day,slot:SLOTS[S.slot]});S.log=S.log.slice(0,60)}
+function toast(t){let x=document.getElementById('toast');x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),1300)}
+function check(){if(net()>=GOAL){S.over=true;S.won=true;finish()}else if(S.happy<=0){S.over=true;S.won=false;finish()}}
+function nextDay(){
+ S.day++;S.slot=0;S.energy=Math.min(100,S.energy+70);
+ if(S.land>0){let g=Math.round(S.land*.03);S.land+=g;say('Your Irese Road land rises by '+fmt(g)+'. Sunshine dey work.','good')}
+ let r=Math.random();
+ if(S.day%7===0){S.happy=Math.min(100,S.happy+12);say('Sunday climb to Oke Maria. Body and soul refreshed. +12 happiness.','good')}
+ else if(S.day%14===13){let b=4000+Math.round(Math.random()*8000);S.cash+=b;say('Olowo of Owo festival! You sell aso-oke and snacks. +'+fmt(b)+'.','gold')}
+ else if(r<.16){S.happy=Math.max(0,S.happy-8);say('NEPA strikes again. −8 happiness.','bad')}
+ else if(r<.28){let b=2500+Math.round(Math.random()*6500);S.cash+=b;say('Cocoa price jump! Stored beans sell for '+fmt(b)+'.','good')}
+ else if(r<.36){S.happy=Math.max(0,S.happy-6);say('Heavy rain floods Idanre road. −6 happiness.','bad')}
+ check();if(!S.over)say('Day '+S.day+' in Akure. The grind continues.')
+}
+function tick(){S.slot++;if(S.slot>=4)nextDay()}
+const ACTS=[
+ ['🌳','Work cocoa farm','+₦12,000 · −30 energy',()=>S.energy>=30,()=>{S.cash+=12000;S.energy-=30;S.happy=Math.max(0,S.happy-5);if(Math.random()<.1){S.cash+=6000;say('Oga pays extra for early harvest. +₦6,000 bonus!','good')}else say('Sunshine hot, but cocoa money lands: +₦12,000.');tick()}],
+ ['🛢️','Sell palm oil online','−10 energy · ₦3k–₦20k',()=>S.energy>=10,()=>{S.energy-=10;let g=3000+Math.round(Math.random()*17000);S.cash+=g;say('Fresh palm oil ships to Lagos customers. +'+fmt(g)+'.','good');tick()}],
+ ['🍲','Pounded yam & egusi','−₦1,500 · +15 happy · +10 energy',()=>S.cash>=1500,()=>{S.cash-=1500;S.happy=Math.min(100,S.happy+15);S.energy=Math.min(100,S.energy+10);say('Soft pounded yam and egusi. Belle full.','good');tick()}],
+ ['🛺','Keke to Oja Oba','−₦300 · random wahala',()=>S.cash>=300,()=>{S.cash-=300;S.energy=Math.max(0,S.energy-8);let r=Math.random();if(r<.3){S.energy=Math.max(0,S.energy-12);say('Ore junction hold-up! Keke stuck. −20 energy.','bad')}else if(r<.5){S.happy=Math.min(100,S.happy+6);say('Keke rider gist you. Small joy.','good')}else say('Smooth ride to Oja Oba market.');tick()}],
+ ['🎉','Groove at Alagbaka','−₦10,000 · +25 happy · −25 energy',()=>S.cash>=10000&&S.energy>=25,()=>{S.cash-=10000;S.happy=Math.min(100,S.happy+25);S.energy-=25;if(Math.random()<.15){S.cash-=5000;S.happy=Math.max(0,S.happy-10);say('One big man bills you for his table. −₦5,000.','bad')}else say('You turn up at Alagbaka. Vibes soft.','good');tick()}],
+ ['🗺️','Buy Irese Road plot','−₦100,000 · grows 3%/day',()=>S.cash>=100000&&S.land===0,()=>{S.cash-=100000;S.land=100000;say('Survey done! Plot secured on Irese Road.','gold');tick()}],
+ ['💰','Sell your plot','Cash out land value',()=>S.land>0,()=>{let v=S.land;S.cash+=v;S.land=0;say('You sell the Irese Road plot for '+fmt(v)+'. Akure bigs!','gold');check();if(!S.over)tick()}],
+ ['😴','Sleep till tomorrow','+70 energy · new day events',()=>true,()=>{say('You crash. Tomorrow na another day.');S.slot=3;nextDay()}]
+];
+function render(){
+ document.getElementById('cash').textContent=fmt(S.cash);
+ document.getElementById('net').textContent='Net worth '+fmt(net())+' / '+fmt(GOAL);
+ document.getElementById('day').textContent=S.day;document.getElementById('slot').textContent=SLOTS[S.slot];
+ document.getElementById('eNum').textContent=S.energy+'/100';document.getElementById('hNum').textContent=S.happy+'/100';
+ document.getElementById('eBar').style.width=S.energy+'%';document.getElementById('hBar').style.width=S.happy+'%';
+ document.getElementById('log').innerHTML=S.log.map(l=>`<div class="entry"><span class="time">D${l.day} ${l.slot}</span><span class="${l.cls}">${l.msg}</span></div>`).join('');
+ const box=document.getElementById('actions');box.innerHTML='';
+ ACTS.forEach(a=>{let b=document.createElement('button');b.className='action';b.disabled=S.over||!a[3]();b.innerHTML=`<div class="icon">${a[0]}</div><div class="aname">${a[1]}</div><div class="desc">${a[2]}</div>`;b.onclick=()=>{if(S.over)return;a[4]();check();save();render()};box.appendChild(b)});
+ save()
+}
+function finish(){
+ document.getElementById('overlay').classList.remove('hidden');
+ document.querySelector('.sun').textContent=S.won?'🏆':'🚌';
+ document.querySelector('.modal h1').innerHTML=S.won?'Akure <span>Big Boy/Babe!</span>':'You Don Enter <span>Night Bus</span>';
+ document.querySelector('.modal p').innerHTML=S.won?`You made <b>${fmt(net())}</b> in <b>${S.day} days</b>. Ondo no dey carry last!`:`Happiness reached zero on day <b>${S.day}</b>.`;
+ document.getElementById('start').textContent='Start a new life';
+ document.getElementById('continue').classList.add('hidden');
+}
+window.begin = begin = function(newLife){if(newLife){S=fresh();save()}document.getElementById('overlay').classList.add('hidden');render()}
+function showStats(){alert(`Day ${S.day}\\nCash: ${fmt(S.cash)}\\nLand: ${fmt(S.land)}\\nNet worth: ${fmt(net())}\\nEnergy: ${S.energy}/100\\nHappiness: ${S.happy}/100`)}
+function showHelp(){alert('Goal: reach ₦1,000,000 net worth.\\n\\nWork and trade to earn money. Eat and groove to restore happiness. Buy the Irese Road plot when you can. Manage your energy and happiness carefully.')}
+document.getElementById('start').setAttribute('onclick','begin(true)');
+document.getElementById('continue').setAttribute('onclick','begin(false)');
+document.getElementById('reset').setAttribute('onclick',"if(confirm('Start a completely new life?'))begin(true)");
+S=load();
+if(S&&!S.over){document.getElementById('continue').classList.remove('hidden')}
+else if(S&&S.over){S=fresh()}
+})();
+</script>
+</body>
+</html>
